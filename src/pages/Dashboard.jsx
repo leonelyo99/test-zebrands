@@ -7,19 +7,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchRepositories } from "../features/repositories/repositoriesSlice";
 
 const Dashboard = () => {
-  const dashboardCalls = useRef(0);
+  const dashboardApiCalls = useRef(0);
 
   const repositoriesState = useSelector((state) => state.repositories);
   const usersState = useSelector((state) => state.users);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (dashboardCalls.current === 0) {
+    if (dashboardApiCalls.current === 0) {
       !usersState.users.length && !usersState.error && dispatch(fetchUsers());
       !repositoriesState.repositories.length &&
         !repositoriesState.error &&
         dispatch(fetchRepositories());
-      dashboardCalls.current = 1;
+      dashboardApiCalls.current = 1;
     }
   }, [dispatch, usersState, repositoriesState]);
 

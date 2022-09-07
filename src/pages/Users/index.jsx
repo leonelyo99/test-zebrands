@@ -13,16 +13,16 @@ import {
 import UserCard from "./UserCard";
 
 const Users = () => {
-  const usersCalls = useRef(0);
+  const usersApiCalls = useRef(0);
   const dispatch = useDispatch();
 
   const usersState = useSelector((state) => state.users);
   const uiState = useSelector((state) => state.ui);
 
   useEffect(() => {
-    if (usersCalls.current === 0) {
+    if (usersApiCalls.current === 0) {
       !usersState.users.length && !usersState.error && dispatch(fetchUsers());
-      usersCalls.current = 1;
+      usersApiCalls.current = 1;
     }
   }, [dispatch, usersState]);
 

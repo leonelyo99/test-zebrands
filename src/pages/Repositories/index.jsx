@@ -13,18 +13,18 @@ import {
 import { Spinner } from "react-bootstrap";
 
 const Repositories = () => {
-  const repositoriesCalls = useRef(0);
+  const repositoriesApiCalls = useRef(0);
   const dispatch = useDispatch();
 
   const repositoriesState = useSelector((state) => state.repositories);
   const uiState = useSelector((state) => state.ui);
 
   useEffect(() => {
-    if (repositoriesCalls.current === 0) {
+    if (repositoriesApiCalls.current === 0) {
       !repositoriesState.repositories.length &&
         !repositoriesState.error &&
         dispatch(fetchRepositories());
-      repositoriesCalls.current = 1;
+      repositoriesApiCalls.current = 1;
     }
   }, [dispatch, repositoriesState]);
 
