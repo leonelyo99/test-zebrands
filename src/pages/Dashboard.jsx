@@ -1,21 +1,26 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../constants/routes";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { fetchUsers } from "../features/users/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRepositories } from "../features/repositories/repositoriesSlice";
 
 const Dashboard = () => {
+  const dashboardCalls = useRef(0);
+
   const repositoriesState = useSelector((state) => state.repositories);
   const usersState = useSelector((state) => state.users);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    !usersState.users.length && !usersState.error && dispatch(fetchUsers());
-    !repositoriesState.repositories.length &&
-      !repositoriesState.error &&
-      dispatch(fetchRepositories());
+    if (dashboardCalls.current === 0) {
+      !usersState.users.length && !usersState.error && dispatch(fetchUsers());
+      !repositoriesState.repositories.length &&
+        !repositoriesState.error &&
+        dispatch(fetchRepositories());
+      dashboardCalls.current = 1;
+    }
   }, [dispatch, usersState, repositoriesState]);
 
   return (

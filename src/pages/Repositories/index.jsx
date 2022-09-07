@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Layaut from "../../common/Layaut";
 import SearchInput from "../../common/SearchInput";
 import Pagination from "../../common/Pagination";
@@ -13,15 +13,19 @@ import {
 import { Spinner } from "react-bootstrap";
 
 const Repositories = () => {
+  const repositoriesCalls = useRef(0);
   const dispatch = useDispatch();
 
   const repositoriesState = useSelector((state) => state.repositories);
   const uiState = useSelector((state) => state.ui);
 
   useEffect(() => {
-    !repositoriesState.repositories.length &&
-      !repositoriesState.error &&
-      dispatch(fetchRepositories());
+    if (repositoriesCalls.current === 0) {
+      !repositoriesState.repositories.length &&
+        !repositoriesState.error &&
+        dispatch(fetchRepositories());
+      repositoriesCalls.current = 1;
+    }
   }, [dispatch, repositoriesState]);
 
   const handlePageClick = (page) => {
@@ -72,10 +76,10 @@ const Repositories = () => {
                 url={repository.html_url}
               />
             ))}
-          {repositoriesState.showSearched &&
-            !repositoriesState.loading &&
-            repositoriesState.searchedRepositories.length === 0 && (
-              <h4 className="text-center">No repository found</h4>
+          {!uiState.loading &&
+            repositoriesState.searchedRepositories.length === 0 &&
+            repositoriesState.showSearched && (
+              <h4 className="text-center">Not repository found</h4>
             )}
         </div>
         <br />
@@ -92,7 +96,7 @@ const Repositories = () => {
           </h4>
         )}
       </section>
-      {!repositoriesState.showSearched && (
+      {!repositoriesState.showSearched && !repositoriesState.error && (
         <Pagination numberOfPage={10} callbackFunction={handlePageClick} />
       )}
     </Layaut>

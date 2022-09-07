@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Layaut from "../../common/Layaut";
@@ -13,13 +13,17 @@ import {
 import UserCard from "./UserCard";
 
 const Users = () => {
+  const usersCalls = useRef(0);
   const dispatch = useDispatch();
 
   const usersState = useSelector((state) => state.users);
   const uiState = useSelector((state) => state.ui);
 
   useEffect(() => {
-    !usersState.users.length && !usersState.error && dispatch(fetchUsers());
+    if (usersCalls.current === 0) {
+      !usersState.users.length && !usersState.error && dispatch(fetchUsers());
+      usersCalls.current = 1;
+    }
   }, [dispatch, usersState]);
 
   const handlePageClick = (page) => {
@@ -70,10 +74,10 @@ const Users = () => {
               />
             ))}
 
-          {usersState.showSearched &&
-            !usersState.loading &&
+          {!uiState.loading &&
+            usersState.showSearched &&
             usersState.searchedUsers.length === 0 && (
-              <h4 className="text-center">No user found</h4>
+              <h4 className="text-center">Not user found</h4>
             )}
         </div>
         <br />
@@ -90,7 +94,7 @@ const Users = () => {
           </h4>
         )}
       </section>
-      {!usersState.showSearched && (
+      {!usersState.showSearched && !usersState.error && (
         <Pagination numberOfPage={10} callbackFunction={handlePageClick} />
       )}
     </Layaut>
