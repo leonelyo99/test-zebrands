@@ -20,7 +20,7 @@ const Users = () => {
 
   useEffect(() => {
     !usersState.users.length && dispatch(fetchUsers());
-  }, []);
+  });
 
   const handlePageClick = (page) => {
     dispatch(fetchUsers(page * 10));
@@ -69,6 +69,10 @@ const Users = () => {
                 profileUrl={user.html_url}
               />
             ))}
+
+          {usersState.showSearched && !usersState.loading && usersState.searchedUsers.length === 0 && (
+            <h4 className="text-center">No user found</h4>
+          )}
         </div>
         <br />
         <br />

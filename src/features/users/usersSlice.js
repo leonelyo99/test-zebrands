@@ -10,7 +10,7 @@ const initialState = {
 };
 
 export const usersSlice = createSlice({
-  name: "counter",
+  name: "user",
   initialState,
   reducers: {
     setUsers: (state, action) => {
@@ -76,12 +76,5 @@ export const fetchSearchUsers = (username) => async (dispatch) => {
     dispatch(endLoading());
   }
 };
-// const _fetchUsers = async (since = 0) => {
-//   const response = await fetch(
-//     `https://api.github.com/users?per_page=10&since=${since}`
-//   );
-//   const users = await response.json();
-//   setUsers(users);
-// };
 
 export default usersSlice.reducer;
