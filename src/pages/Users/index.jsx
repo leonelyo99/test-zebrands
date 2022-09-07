@@ -19,8 +19,8 @@ const Users = () => {
   const uiState = useSelector((state) => state.ui);
 
   useEffect(() => {
-    !usersState.users.length && dispatch(fetchUsers());
-  });
+    !usersState.users.length && !usersState.error && dispatch(fetchUsers());
+  }, [dispatch, usersState]);
 
   const handlePageClick = (page) => {
     dispatch(fetchUsers(page * 10));
@@ -70,14 +70,16 @@ const Users = () => {
               />
             ))}
 
-          {usersState.showSearched && !usersState.loading && usersState.searchedUsers.length === 0 && (
-            <h4 className="text-center">No user found</h4>
-          )}
+          {usersState.showSearched &&
+            !usersState.loading &&
+            usersState.searchedUsers.length === 0 && (
+              <h4 className="text-center">No user found</h4>
+            )}
         </div>
         <br />
         <br />
         {uiState.loading && (
-          <div className="w-100 d-flex">
+          <div className="w-100 d-flex" data-testid="users-spinner">
             <Spinner className="m-auto" animation="border" variant="primary" />
           </div>
         )}

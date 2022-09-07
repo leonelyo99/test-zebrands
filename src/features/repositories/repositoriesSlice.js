@@ -46,13 +46,17 @@ export const fetchRepositories =
   (since = 0) =>
   async (dispatch) => {
     dispatch(startLoading());
-    dispatch(setError(false));
     try {
       const response = await fetch(
         `https://api.github.com/repositories?since=${since}`
       );
-      const repositories = await response.json();
-      dispatch(setRepositories(repositories));
+      if (response.ok) {
+        const repositories = await response.json();
+        dispatch(setRepositories(repositories));
+        dispatch(setError(false));
+      } else {
+        dispatch(setError(true));
+      }
     } catch {
       dispatch(setError(true));
     } finally {
@@ -62,13 +66,17 @@ export const fetchRepositories =
 
 export const fetchSearchRepositories = (username) => async (dispatch) => {
   dispatch(startLoading());
-  dispatch(setError(false));
   try {
     const response = await fetch(
       `https://api.github.com/search/repositories?q=${username}&per_page=10`
     );
-    const data = await response.json();
-    dispatch(setSearchedRepositories(data.items));
+    if (response.ok) {
+      const data = await response.json();
+      dispatch(setSearchedRepositories(data.items));
+      dispatch(setError(false));
+    } else {
+      dispatch(setError(true));
+    }
   } catch {
     dispatch(setError(true));
   } finally {

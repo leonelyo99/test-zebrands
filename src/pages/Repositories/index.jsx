@@ -19,8 +19,10 @@ const Repositories = () => {
   const uiState = useSelector((state) => state.ui);
 
   useEffect(() => {
-    !repositoriesState.repositories.length && dispatch(fetchRepositories());
-  });
+    !repositoriesState.repositories.length &&
+      !repositoriesState.error &&
+      dispatch(fetchRepositories());
+  }, [dispatch, repositoriesState]);
 
   const handlePageClick = (page) => {
     dispatch(fetchRepositories(page * 10));
@@ -70,7 +72,8 @@ const Repositories = () => {
                 url={repository.html_url}
               />
             ))}
-          {repositoriesState.showSearched && !repositoriesState.loading &&
+          {repositoriesState.showSearched &&
+            !repositoriesState.loading &&
             repositoriesState.searchedRepositories.length === 0 && (
               <h4 className="text-center">No repository found</h4>
             )}
@@ -78,7 +81,7 @@ const Repositories = () => {
         <br />
         <br />
         {uiState.loading && (
-          <div className="w-100 d-flex">
+          <div className="w-100 d-flex" data-testid="repositories-spinner">
             <Spinner className="m-auto" animation="border" variant="primary" />
           </div>
         )}

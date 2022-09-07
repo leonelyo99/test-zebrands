@@ -12,9 +12,11 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    !usersState.users.length && dispatch(fetchUsers());
-    !repositoriesState.repositories.length && dispatch(fetchRepositories());
-  });
+    !usersState.users.length && !usersState.error && dispatch(fetchUsers());
+    !repositoriesState.repositories.length &&
+      !repositoriesState.error &&
+      dispatch(fetchRepositories());
+  }, [dispatch, usersState, repositoriesState]);
 
   return (
     <AppContainer className="container text-center">

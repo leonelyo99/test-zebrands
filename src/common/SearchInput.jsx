@@ -28,11 +28,13 @@ const SearchInput = ({ onSubmit, onCancel, searchedValue = "" }) => {
           aria-label="Search"
           value={inputValue}
           onChange={(event) => setInputValue(event.target.value)}
+          data-testid="search-input"
         />
         <button
           className="btn btn-outline-primary"
           type="submit"
           disabled={inputValue.length === 0}
+          data-testid="search-button"
         >
           Search
         </button>
@@ -40,6 +42,7 @@ const SearchInput = ({ onSubmit, onCancel, searchedValue = "" }) => {
           className="btn btn-outline-danger ms-2"
           onClick={handleCancel}
           disabled={inputValue.length === 0}
+          data-testid="cancel-button"
         >
           Cancel
         </button>

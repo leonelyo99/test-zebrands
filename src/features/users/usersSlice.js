@@ -46,13 +46,17 @@ export const fetchUsers =
   (since = 0) =>
   async (dispatch) => {
     dispatch(startLoading());
-    dispatch(setError(false));
     try {
       const response = await fetch(
         `https://api.github.com/users?per_page=10&since=${since}`
       );
-      const users = await response.json();
-      dispatch(setUsers(users));
+      if (response.ok) {
+        const users = await response.json();
+        dispatch(setUsers(users));
+        dispatch(setError(false));
+      } else {
+        dispatch(setError(true));
+      }
     } catch {
       dispatch(setError(true));
     } finally {
@@ -62,14 +66,17 @@ export const fetchUsers =
 
 export const fetchSearchUsers = (username) => async (dispatch) => {
   dispatch(startLoading());
-  dispatch(setError(false));
-  console.log(username);
   try {
     const response = await fetch(
       `https://api.github.com/search/users?q=${username}&per_page=10`
     );
-    const data = await response.json();
-    dispatch(setSearchedUsers(data.items));
+    if (response.ok) {
+      const data = await response.json();
+      dispatch(setSearchedUsers(data.items));
+      dispatch(setError(false));
+    } else {
+      dispatch(setError(true));
+    }
   } catch {
     dispatch(setError(true));
   } finally {
