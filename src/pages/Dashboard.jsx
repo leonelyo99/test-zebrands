@@ -1,8 +1,18 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../constants/routes";
+import { useEffect } from "react";
+import { fetchUsers } from "../features/users/usersSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Dashboard = () => {
+  const usersState = useSelector((state) => state.users);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    !usersState.users.length && dispatch(fetchUsers());
+  }, []);
+
   return (
     <AppContainer className="container text-center">
       <div className="row align-items-center h-100">
@@ -12,7 +22,7 @@ const Dashboard = () => {
               <p className="h4 m-0">Users</p>
             </Link>
             <Link to={ROUTES.repositories} className="btn btn-primary p-2">
-                <p className="h4 m-0">Repositories</p>
+              <p className="h4 m-0">Repositories</p>
             </Link>
           </div>
         </div>

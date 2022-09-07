@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-const SearchInput = ({ onSubmit, onCancel }) => {
-  const [inputValue, setInputValue] = useState("");
+const SearchInput = ({ onSubmit, onCancel, searchedValue = "" }) => {
+  const [inputValue, setInputValue] = useState(searchedValue);
 
   const handleSubmit = (e) => {
     e.preventDefault();
